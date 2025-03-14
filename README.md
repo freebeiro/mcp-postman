@@ -1,10 +1,20 @@
-# MCP Postman Server
+# Postman MCP Server
 
-This project is a Cloudflare Workers MCP (Model Context Protocol) server. It allows for executing remote procedure calls (RPCs) from clients that support the MCP protocol.
+A Model Context Protocol (MCP) server built with Cloudflare Workers that provides Postman/Newman capabilities to AI assistants like Claude.
+
+## Overview
+
+The Postman MCP Server is a Cloudflare Worker that provides a simple interface for AI assistants to:
+
+1. **Test Scenario Management** - Create and manage test scenarios using Postman collections
+2. **Mock Server Generation** - Generate mock servers based on Postman collections
+3. **API Testing** - Run tests against APIs using Newman (Postman's command-line collection runner)
+
+This server is designed to be used with Claude and other AI assistants that support the Model Context Protocol (MCP).
 
 ## Features
 
-- **Seamless AI Integration**: Connect directly with Claude AI to execute API calls
+- **Seamless AI Integration**: Connect directly with Claude AI to execute Postman operations
 - **SOLID Principles**: Built following best practices for maintainable code
 - **Cloudflare Workers**: Global deployment with fast response times
 - **Easy to Extend**: Simple framework for adding new API methods
@@ -42,6 +52,43 @@ Simply ask Claude to use this MCP server:
 - "Use mcp-postman to say hello to [name]"
 - "Use mcp-postman to reverse the string '[text]'"
 
+## Getting Started
+
+### Prerequisites
+
+- Node.js and npm
+- Cloudflare account with Workers access
+- Claude Desktop (for testing)
+- Postman API key
+
+### Environment Setup
+
+1. Create your `.env` file:
+   ```bash
+   cp .env.example .env
+   ```
+
+2. Update the `.env` file with your Cloudflare API token and Postman API key.
+
+3. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+## Development
+
+```bash
+# Start local development server
+npm run dev
+```
+
+## Deployment
+
+```bash
+# Deploy to Cloudflare Workers
+npm run deploy
+```
+
 ## Documentation
 
 For detailed information on:
@@ -53,32 +100,31 @@ For detailed information on:
 
 See our [Comprehensive Guide](./docs/comprehensive-guide.md).
 
-## Setup
+## Project Structure
 
-1. **Prerequisites:**
-   - Node.js and npm installed
-   - Cloudflare account with API token
+```
+mcp-postman/
+├── docs/               # Documentation
+│   ├── README.md            # Docs overview
+│   └── comprehensive-guide.md # Detailed setup guide
+├── src/                # Source code
+│   ├── interfaces/     # TypeScript interfaces
+│   ├── services/       # Business logic services
+│   └── index.ts        # Main worker entry point
+├── test/               # Tests
+├── .env                # Environment variables (not in git)
+├── .env.example        # Example environment variables
+├── DEVELOPMENT_GUIDELINES.md # Development guidelines
+├── SOLID_PRINCIPLES.md # SOLID principles guide
+└── package.json        # Project dependencies
+```
 
-2. **Environment Setup:**
-   ```bash
-   # Set your Cloudflare API token
-   export CLOUDFLARE_API_TOKEN=your_token_here
-   
-   # Install dependencies
-   npm install
-   ```
+## Development Guidelines
 
-3. **Development:**
-   ```bash
-   # Start local development server
-   npm run dev
-   ```
+This project follows strict development guidelines and SOLID principles to ensure maintainability and high-quality code. Please refer to the following documents before contributing:
 
-4. **Deployment:**
-   ```bash
-   # Deploy to Cloudflare Workers
-   npm run deploy
-   ```
+- [Development Guidelines](./DEVELOPMENT_GUIDELINES.md)
+- [SOLID Principles Guide](./SOLID_PRINCIPLES.md)
 
 ## Code Architecture
 
