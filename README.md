@@ -1,147 +1,90 @@
 # Postman MCP Server
 
-A Model Context Protocol (MCP) server built with Cloudflare Workers that provides Postman/Newman capabilities to AI assistants like Claude.
+A Cloudflare Worker that provides API access to Postman collections and environments via the Claude AI MCP (Model Control Plane) interface.
 
 ## Overview
 
-The Postman MCP Server is a Cloudflare Worker that provides a simple interface for AI assistants to:
+This server allows Claude AI to interact with your Postman collections and environments to perform various operations, including:
 
-1. **Test Scenario Management** - Create and manage test scenarios using Postman collections
-2. **Mock Server Generation** - Generate mock servers based on Postman collections
-3. **API Testing** - Run tests against APIs using Newman (Postman's command-line collection runner)
+- Retrieving collections and environments
+- Creating new collections and environments
+- Adding requests to collections
+- Running collections and getting test results
 
-This server is designed to be used with Claude and other AI assistants that support the Model Context Protocol (MCP).
-
-## Features
-
-- **Seamless AI Integration**: Connect directly with Claude AI to execute Postman operations
-- **SOLID Principles**: Built following best practices for maintainable code
-- **Cloudflare Workers**: Global deployment with fast response times
-- **Easy to Extend**: Simple framework for adding new API methods
+This enables Claude to assist with API testing, documentation, and management tasks in your workflows.
 
 ## Current Methods
 
-The server currently supports the following methods:
+The Postman MCP Server provides the following methods:
 
-### `sayHello(name: string): string`
-A simple greeting method that returns a welcome message with the provided name.
+### Basic Utility Methods
+- `mcp__sayHello(name)` - Returns a greeting with the provided name
+- `mcp__reverseString(input)` - Reverses the characters in a string
 
-Example:
-```json
-{
-  "name": "John"
-}
-```
-Returns: `"Hello from an MCP Worker, John!"`
+### Collection Methods
+- `mcp__get_collections()` - Gets all collections in your Postman account
+- `mcp__get_collection(collectionId)` - Gets details for a specific collection
+- `mcp__create_collection(name, description)` - Creates a new collection
+- `mcp__add_request(collectionId, name, method, url, ...)` - Adds a request to a collection
 
-### `reverseString(input: string): string`
-Reverses the characters in a given string.
+### Environment Methods
+- `mcp__get_environments()` - Gets all environments in your Postman account
+- `mcp__get_environment(environmentId)` - Gets details for a specific environment
+- `mcp__create_environment(name, variables)` - Creates a new environment with variables
 
-Example:
-```json
-{
-  "input": "Hello World"
-}
-```
-Returns: `"dlroW olleH"`
-
-## Usage with Claude
-
-Simply ask Claude to use this MCP server:
-
-- "Use mcp-postman to say hello to [name]"
-- "Use mcp-postman to reverse the string '[text]'"
+### Test Execution
+- `mcp__run_collection(collectionId, environmentId)` - Runs a collection with an optional environment
 
 ## Getting Started
 
-### Prerequisites
-
-- Node.js and npm
-- Cloudflare account with Workers access
-- Claude Desktop (for testing)
-- Postman API key
-
-### Environment Setup
-
-1. Create your `.env` file:
-   ```bash
-   cp .env.example .env
-   ```
-
-2. Update the `.env` file with your Cloudflare API token and Postman API key.
-
-3. Install dependencies:
-   ```bash
-   npm install
-   ```
+1. Clone this repository
+2. Install dependencies: `npm install`
+3. Copy `.env.example` to `.env` and add your Postman API key
+4. Deploy to Cloudflare Workers: `wrangler deploy`
 
 ## Development
 
+To run the server locally for development:
+
 ```bash
-# Start local development server
 npm run dev
 ```
 
-## Deployment
-
-```bash
-# Deploy to Cloudflare Workers
-npm run deploy
-```
-
-## Documentation
-
-For detailed information on:
-- [Setting up an MCP server](./docs/comprehensive-guide.md#1-prerequisites)
-- [API Token Configuration](./docs/comprehensive-guide.md#4-api-token-configuration)
-- [Claude Desktop Integration](./docs/comprehensive-guide.md#6-claude-desktop-integration)
-- [Extending the Server](./docs/comprehensive-guide.md#8-extending-your-mcp-server)
-- [Troubleshooting](./docs/comprehensive-guide.md#9-common-issues-and-troubleshooting)
-
-See our [Comprehensive Guide](./docs/comprehensive-guide.md).
+This will start the server locally using wrangler.
 
 ## Project Structure
 
+- `/src` - Source code
+  - `/interfaces` - TypeScript interfaces
+  - `/services` - Service classes
+  - `index.ts` - Main worker entry point
+- `/test` - Unit tests
+- `/examples` - Example usage
+- `/docs` - Additional documentation
+
+## Examples
+
+See the [examples/postman-examples.md](examples/postman-examples.md) file for detailed examples of how to use the Postman MCP Server with Claude AI.
+
+## Deployment
+
+To deploy to Cloudflare Workers:
+
+```bash
+npm run deploy
 ```
-mcp-postman/
-├── docs/               # Documentation
-│   ├── README.md            # Docs overview
-│   └── comprehensive-guide.md # Detailed setup guide
-├── src/                # Source code
-│   ├── interfaces/     # TypeScript interfaces
-│   ├── services/       # Business logic services
-│   └── index.ts        # Main worker entry point
-├── test/               # Tests
-├── .env                # Environment variables (not in git)
-├── .env.example        # Example environment variables
-├── DEVELOPMENT_GUIDELINES.md # Development guidelines
-├── SOLID_PRINCIPLES.md # SOLID principles guide
-└── package.json        # Project dependencies
-```
 
-## Development Guidelines
+Make sure your `wrangler.toml` file is configured properly.
 
-This project follows strict development guidelines and SOLID principles to ensure maintainability and high-quality code. Please refer to the following documents before contributing:
+## Security
 
-- [Development Guidelines](./DEVELOPMENT_GUIDELINES.md)
-- [SOLID Principles Guide](./SOLID_PRINCIPLES.md)
+This server requires a Postman API key to function. Ensure that your key is stored securely in the Cloudflare Workers environment variables and not committed to version control.
 
-## Code Architecture
+## Contributing
 
-This project follows SOLID principles:
-
-- **Single Responsibility Principle**: Each method handles one specific task
-- **Open/Closed Principle**: The code is designed to be extended without modification
-- **Liskov Substitution Principle**: Interfaces can be substituted for their implementations
-- **Interface Segregation Principle**: Methods are grouped into specific interfaces
-- **Dependency Inversion Principle**: High-level modules depend on abstractions
-
-## Configuration
-
-The MCP server uses a shared secret for authentication. This is stored in:
-- `.dev.vars` for local development
-- Cloudflare secrets for production
+1. Follow the [DEVELOPMENT_GUIDELINES.md](DEVELOPMENT_GUIDELINES.md)
+2. Adhere to [SOLID_PRINCIPLES.md](SOLID_PRINCIPLES.md) for code design
 
 ## License
 
-[Add your license information here] 
+MIT License 
