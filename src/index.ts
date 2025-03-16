@@ -13,10 +13,6 @@ export interface Env {
  * Postman MCP Server - Cloudflare Worker entry point
  */
 export default class MyWorker extends WorkerEntrypoint<Env> {
-  constructor(env: Env, ctx: ExecutionContext) {
-    super(env, ctx);
-  }
-
   /**
    * A warm, friendly greeting from your new Workers MCP server.
    * @param name {string} the name of the person we are greeting.
