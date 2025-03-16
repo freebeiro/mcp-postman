@@ -15,7 +15,7 @@ export interface Env {
 /**
  * Postman MCP Server - Cloudflare Worker entry point
  */
-export class PostmanMcpWorker {
+export class PostmanMcpWorker extends WorkerEntrypoint<Env> {
   private mcpService: McpService;
 
   /**
@@ -30,6 +30,45 @@ export class PostmanMcpWorker {
     
     // Initialize the MCP service with the Postman API key
     this.mcpService = new McpService(env.POSTMAN_API_KEY);
+  }
+
+  /**
+   * A warm, friendly greeting from your new Workers MCP server.
+   * @param name {string} the name of the person we are greeting.
+   * @return {string} the contents of our greeting.
+   */
+  sayHello(name: string): string {
+    return `Hello from an MCP Worker, ${name}!`
+  }
+
+  /**
+   * Reverses the characters in a string.
+   * @param input {string} the string to reverse.
+   * @return {string} the reversed string.
+   */
+  reverseString(input: string): string {
+    return input.split('').reverse().join('');
+  }
+
+  /**
+   * Gets a Postman collection by ID.
+   * @param collectionId {string} the ID of the collection to retrieve.
+   * @return {Promise<string>} the collection data as a formatted string.
+   * @mcp
+   */
+  async getCollection(collectionId: string): Promise<string> {
+    const response = await fetch(`https://api.getpostman.com/collections/${collectionId}`, {
+      headers: {
+        'X-Api-Key': this.env.POSTMAN_API_KEY
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to retrieve collection with ID ${collectionId}`);
+    }
+
+    const data = await response.json();
+    return JSON.stringify(data, null, 2);
   }
 
   /**
